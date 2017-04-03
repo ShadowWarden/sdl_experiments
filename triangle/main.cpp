@@ -83,7 +83,7 @@ static void setup_opengl( int width, int height ){
 	glClearColor( 0, 0, 0, 0 );
 
 	/* Setup our viewport. */
-	glViewport( 0, 0, width, height );
+	glViewport( 0.0, 0.0, width, height );
 
 	/*
 	 * Change to the projection matrix and set
@@ -95,7 +95,7 @@ static void setup_opengl( int width, int height ){
 	 * EXERCISE:
 	 * Replace this with a call to glFrustum.
 	 */
-	gluPerspective( 45.0f, ratio, 1.0, 100.0f );
+	gluPerspective( 60.0f, ratio, 1.0, 100.0f );
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
