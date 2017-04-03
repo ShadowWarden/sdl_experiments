@@ -16,7 +16,10 @@ class Triangle{
 		void shutdown();
 
 		void onResize(int width, int height);
-	
+		void print();
+		float GetAngle();
 	private:
 		float m_rotationAngle;
 };
+
+extern float speed;

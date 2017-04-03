@@ -14,6 +14,12 @@
 
 #include <cstdlib>
 
+float speed = 10.0f;
+
+void ChangeSpeed(float dv){
+	speed += dv;
+}
+
 static int fps=0,sec0=0,count=0;
 int FramesPerSecond(void){
 	int sec = glutGet(GLUT_ELAPSED_TIME)/1000;
@@ -32,7 +38,7 @@ static void quit(int code){
 	exit(code);
 }
 
-static void key_press(SDL_keysym* keysym, int * fps){
+static void key_press(SDL_keysym* keysym, Triangle *T, int * fps){
 	switch(keysym->sym){
 		case SDLK_ESCAPE:
 			quit(0);
@@ -40,18 +46,27 @@ static void key_press(SDL_keysym* keysym, int * fps){
 		case SDLK_SPACE:
 			fprintf(stderr,"FPS = %d\n",*fps);
 			break;
+		case SDLK_KP_PLUS:
+			ChangeSpeed(5.0f);
+			break;
+		case SDLK_KP_MINUS:
+			ChangeSpeed(-5.0f);
+			break;
+		case SDLK_i:
+			T->print();
+			break;
 		default:
 			break;
 	}
 }
 
-static void process_events(int *fps){
+static void process_events(Triangle *T,int *fps){
 	SDL_Event event;
 
 	while(SDL_PollEvent(&event)){
 		switch(event.type){
 			case SDL_KEYDOWN:
-				key_press(&event.key.keysym,fps);
+				key_press(&event.key.keysym,T,fps);
 				break;
 			case SDL_QUIT:
 				quit(0);
@@ -125,12 +140,6 @@ int main(int argc, char ** argv){
 	height = 480;
 	bpp = info->vfmt->BitsPerPixel;
 
-	SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
-	SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 5 );
-	SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
-	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
-	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-
 	flags = SDL_OPENGL;
 
 	if(SDL_SetVideoMode(width, height, bpp, flags) == 0){
@@ -140,11 +149,10 @@ int main(int argc, char ** argv){
 
 	Triangle T;
 	int fps;
-
 	setup_opengl(width, height);
 
 	while(1){
-		process_events(&fps);
+		process_events(&T,&fps);
 		draw_screen(T,&fps);
 	}
 

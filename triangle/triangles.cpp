@@ -8,6 +8,7 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <cstdio>
 #include "triangles.h"
 
 Triangle::Triangle(){
@@ -22,10 +23,9 @@ bool Triangle::init(){
 }
 
 void Triangle::prepare(float dt){
-	const float SPEED = 15.0f;
-	m_rotationAngle += SPEED*dt;
+	m_rotationAngle += speed*dt;
 	if(m_rotationAngle > 360.0f){
-		m_rotationAngle -= 360.0f;
+		m_rotationAngle = m_rotationAngle-360.0f;
 	}
 }
 
@@ -70,3 +70,10 @@ void Triangle::onResize(int width, int height){
 	glLoadIdentity();
 }
 
+void Triangle::print(){
+	fprintf(stderr,"speed = %f ; m_rotationAngle = %f\n",speed,m_rotationAngle);
+}
+
+float Triangle::GetAngle(){
+	return m_rotationAngle;
+}
