@@ -14,28 +14,44 @@
 
 #include <cstdlib>
 
+static int fps=0,sec0=0,count=0;
+int FramesPerSecond(void){
+	int sec = glutGet(GLUT_ELAPSED_TIME)/1000;
+	if (sec!=sec0){
+		sec0 = sec;
+		fps = count;
+		count=0;
+	}
+	count++;
+	return fps;
+}
+
+
 static void quit(int code){
 	SDL_Quit();
 	exit(code);
 }
 
-static void key_press(SDL_keysym* keysym){
+static void key_press(SDL_keysym* keysym, int * fps){
 	switch(keysym->sym){
 		case SDLK_ESCAPE:
 			quit(0);
+			break;
+		case SDLK_SPACE:
+			fprintf(stderr,"FPS = %d\n",*fps);
 			break;
 		default:
 			break;
 	}
 }
 
-static void process_events(void){
+static void process_events(int *fps){
 	SDL_Event event;
 
 	while(SDL_PollEvent(&event)){
 		switch(event.type){
 			case SDL_KEYDOWN:
-				key_press(&event.key.keysym);
+				key_press(&event.key.keysym,fps);
 				break;
 			case SDL_QUIT:
 				quit(0);
@@ -44,10 +60,11 @@ static void process_events(void){
 	}
 }
 
-static void draw_screen(Triangle T){
+static void draw_screen(Triangle T,int * fps){
 	float time = 0.001*glutGet(GLUT_ELAPSED_TIME);
 	T.prepare(time);
 	T.render();
+	*fps = FramesPerSecond();
 	SDL_GL_SwapBuffers();
 }
 
@@ -122,13 +139,14 @@ int main(int argc, char ** argv){
 	}
 
 	Triangle T;
+	int fps;
 
 	setup_opengl(width, height);
 
 	while(1){
-		process_events();
-		draw_screen(T);
+		process_events(&fps);
+		draw_screen(T,&fps);
 	}
-	
+
 	return 0;
 }
