@@ -6,13 +6,15 @@
 *  Simple rotating triangle
 */
 
+#include "camera.h"
+
 class Triangle{
 	public:
 		Triangle();
 
 		bool init();
 		void prepare(float dt);
-		void render();
+		void render(Camera C);
 		void shutdown();
 
 		void onResize(int width, int height);

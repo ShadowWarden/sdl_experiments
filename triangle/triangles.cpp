@@ -9,7 +9,13 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <cstdio>
+#include <cmath>
 #include "triangles.h"
+
+#define PI 3.14159265
+#define DEGtoRAD 0.0174533
+/* Fix radius to 1.0 */
+const float r = 2.0f;
 
 Triangle::Triangle(){
 	m_rotationAngle = 0.0f;
@@ -29,12 +35,20 @@ void Triangle::prepare(float dt){
 	}
 }
 
-void Triangle::render(){
+void Triangle::render(Camera C){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glLoadIdentity();
+	float th = C.Getth();
+	float ph = C.Getph();
 
-	gluLookAt(1.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0);
+	float Eye_x = r*sin(th*DEGtoRAD)*cos(ph*DEGtoRAD);
+	float Eye_y = r*sin(th*DEGtoRAD)*sin(ph*DEGtoRAD);
+	float Eye_z = r*cos(th*DEGtoRAD);
+	
+	float Up_z = (th>=180.0f && th<360.0f)?-1.0f:1.0f;
+
+	gluLookAt(Eye_x,Eye_y,Eye_z,0.0,0.0,0.0,0.0,0.0,Up_z);
 	glRotatef(m_rotationAngle, 0.0f, 0.0f, 1.0f);
 
 	glBegin(GL_TRIANGLES);

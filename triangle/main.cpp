@@ -38,7 +38,7 @@ static void quit(int code){
 	exit(code);
 }
 
-static void key_press(SDL_keysym* keysym, Triangle *T, int * fps){
+static void key_press(SDL_keysym* keysym, Triangle *T, Camera *C, int * fps){
 	switch(keysym->sym){
 		case SDLK_ESCAPE:
 			quit(0);
@@ -55,18 +55,33 @@ static void key_press(SDL_keysym* keysym, Triangle *T, int * fps){
 		case SDLK_i:
 			T->print();
 			break;
+		case SDLK_UP:
+			C->Move(1);
+			break;
+		case SDLK_DOWN:
+			C->Move(-1);
+			break;
+		case SDLK_LEFT:
+			C->Move(-2);
+			break;
+		case SDLK_RIGHT:
+			C->Move(2);
+			break;
+		case SDLK_p:
+			C->print();
+			break;
 		default:
 			break;
 	}
 }
 
-static void process_events(Triangle *T,int *fps){
+static void process_events(Triangle *T,Camera *C,int *fps){
 	SDL_Event event;
 
 	while(SDL_PollEvent(&event)){
 		switch(event.type){
 			case SDL_KEYDOWN:
-				key_press(&event.key.keysym,T,fps);
+				key_press(&event.key.keysym,T,C,fps);
 				break;
 			case SDL_QUIT:
 				quit(0);
@@ -75,10 +90,10 @@ static void process_events(Triangle *T,int *fps){
 	}
 }
 
-static void draw_screen(Triangle T,int * fps){
+static void draw_screen(Triangle T,Camera C,int * fps){
 	float time = 0.001*glutGet(GLUT_ELAPSED_TIME);
 	T.prepare(time);
-	T.render();
+	T.render(C);
 	*fps = FramesPerSecond();
 	SDL_GL_SwapBuffers();
 }
@@ -90,9 +105,9 @@ static void setup_opengl( int width, int height ){
 	glShadeModel( GL_SMOOTH );
 
 	/* Culling. */
-	glCullFace( GL_BACK );
-	glFrontFace( GL_CCW );
-	glEnable( GL_CULL_FACE );
+//	glCullFace( GL_BACK );
+//	glFrontFace( GL_CCW );
+//	glEnable( GL_CULL_FACE );
 
 	/* Set the clear color. */
 	glClearColor( 0, 0, 0, 0 );
@@ -148,12 +163,13 @@ int main(int argc, char ** argv){
 	}
 
 	Triangle T;
+	Camera C;
 	int fps;
 	setup_opengl(width, height);
 
 	while(1){
-		process_events(&T,&fps);
-		draw_screen(T,&fps);
+		process_events(&T,&C,&fps);
+		draw_screen(T,C,&fps);
 	}
 
 	return 0;
