@@ -17,6 +17,11 @@ const int move_amt = 5.0f;
 Camera::Camera(){
 	th = 45.0f;
 	ph = 45.0f;
+	r = 2.0f;
+}
+
+float Camera::Getr(){
+	return r;
 }
 
 void Camera::Move(int dir){
@@ -44,14 +49,16 @@ void Camera::Move(int dir){
 			if(ph<=0.0f){
 				ph+=360.0f;
 			}
-	
+
 			break;
 		default:
 			break;
 	}	
 }
 
-
+void Camera::Zoom(float dr){
+	r += dr;	
+}
 
 void Camera::print(){
 	fprintf(stderr,"Theta = %f ; Phi = %f\n",th,ph);

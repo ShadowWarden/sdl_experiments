@@ -14,7 +14,10 @@ class Camera{
 		float Getth();
 		float Getph();
 		void print();
+		void Zoom(float dr);
+		float Getr();
 	private:
 		float th;
 		float ph;
+		float r;
 };

@@ -15,10 +15,12 @@
 #define PI 3.14159265
 #define DEGtoRAD 0.0174533
 /* Fix radius to 1.0 */
-const float r = 2.0f;
+//const float r = 2.0f;
 
 Triangle::Triangle(){
 	m_rotationAngle = 0.0f;
+	speed = 15.0f;
+	flag = false;
 }
 
 bool Triangle::init(){
@@ -29,7 +31,8 @@ bool Triangle::init(){
 }
 
 void Triangle::prepare(float dt){
-	m_rotationAngle += speed*dt;
+	if(!flag)
+		m_rotationAngle += speed*dt;
 	if(m_rotationAngle > 360.0f){
 		m_rotationAngle = m_rotationAngle-360.0f;
 	}
@@ -41,6 +44,7 @@ void Triangle::render(Camera C){
 	glLoadIdentity();
 	float th = C.Getth();
 	float ph = C.Getph();
+	float r = C.Getr();
 
 	float Eye_x = r*sin(th*DEGtoRAD)*cos(ph*DEGtoRAD);
 	float Eye_y = r*sin(th*DEGtoRAD)*sin(ph*DEGtoRAD);
@@ -140,4 +144,9 @@ void Triangle::print(){
 
 float Triangle::GetAngle(){
 	return m_rotationAngle;
+}
+
+void Triangle::ChangeSpeed(float dv){
+	speed += dv;
+	//flag = true;
 }

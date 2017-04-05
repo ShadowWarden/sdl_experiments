@@ -14,12 +14,6 @@
 
 #include <cstdlib>
 
-float speed = 10.0f;
-
-void ChangeSpeed(float dv){
-	speed += dv;
-}
-
 static int fps=0,sec0=0,count=0;
 int FramesPerSecond(void){
 	int sec = glutGet(GLUT_ELAPSED_TIME)/1000;
@@ -47,33 +41,39 @@ static void key_press(SDL_keysym* keysym, Triangle *T, Camera *C, int * fps){
 			fprintf(stderr,"FPS = %d\n",*fps);
 			break;
 		case SDLK_KP_PLUS:
-			ChangeSpeed(5.0f);
+			T->ChangeSpeed(5.0f);
 			break;
 		case SDLK_KP_MINUS:
-			ChangeSpeed(-5.0f);
+			T->ChangeSpeed(-5.0f);
 			break;
 		case SDLK_i:
 			T->print();
 			break;
 		case SDLK_UP:
-		case SDLK_w:
+		case SDLK_KP8:
 			C->Move(-1);
 			break;
 		case SDLK_DOWN:
-		case SDLK_x:
+		case SDLK_KP2:
 			C->Move(+1);
 			break;
+		case SDLK_KP4:
 		case SDLK_LEFT:
-		case SDLK_a:
 			C->Move(-2);
 			break;
+		case SDLK_KP6:
 		case SDLK_RIGHT:
-		case SDLK_d:
 			C->Move(2);
 			break;
 		case SDLK_p:
 			C->print();
 			break;
+		case SDLK_w:
+			C->Zoom(-0.05f);
+			break;
+		case SDLK_x:
+			C->Zoom(0.05f);
+			break;	
 		default:
 			break;
 	}
@@ -129,7 +129,7 @@ static void setup_opengl( int width, int height ){
 	 * EXERCISE:
 	 * Replace this with a call to glFrustum.
 	 */
-	gluPerspective( 45.0f, ratio, 1.0, 100.0f );
+	gluPerspective( 45.0f, ratio, 1.0f, 100.0f );
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }

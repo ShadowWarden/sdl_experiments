@@ -19,9 +19,12 @@ class Triangle{
 
 		void onResize(int width, int height);
 		void print();
+		void ChangeSpeed(float);
 		float GetAngle();
 	private:
 		float m_rotationAngle;
+		float speed;
+		bool flag;
 };
 
 extern float speed;
