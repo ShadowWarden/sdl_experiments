@@ -56,15 +56,19 @@ static void key_press(SDL_keysym* keysym, Triangle *T, Camera *C, int * fps){
 			T->print();
 			break;
 		case SDLK_UP:
-			C->Move(1);
-			break;
-		case SDLK_DOWN:
+		case SDLK_w:
 			C->Move(-1);
 			break;
+		case SDLK_DOWN:
+		case SDLK_x:
+			C->Move(+1);
+			break;
 		case SDLK_LEFT:
+		case SDLK_a:
 			C->Move(-2);
 			break;
 		case SDLK_RIGHT:
+		case SDLK_d:
 			C->Move(2);
 			break;
 		case SDLK_p:
@@ -105,9 +109,9 @@ static void setup_opengl( int width, int height ){
 	glShadeModel( GL_SMOOTH );
 
 	/* Culling. */
-//	glCullFace( GL_BACK );
-//	glFrontFace( GL_CCW );
-//	glEnable( GL_CULL_FACE );
+	//glCullFace( GL_BACK );
+	//glFrontFace( GL_CCW );
+	//glEnable( GL_CULL_FACE );
 
 	/* Set the clear color. */
 	glClearColor( 0, 0, 0, 0 );
@@ -125,7 +129,7 @@ static void setup_opengl( int width, int height ){
 	 * EXERCISE:
 	 * Replace this with a call to glFrustum.
 	 */
-	gluPerspective( 60.0f, ratio, 1.0, 100.0f );
+	gluPerspective( 45.0f, ratio, 1.0, 100.0f );
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
@@ -156,6 +160,13 @@ int main(int argc, char ** argv){
 	bpp = info->vfmt->BitsPerPixel;
 
 	flags = SDL_OPENGL;
+
+	SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
+	SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
+	SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 8 );
+	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
+	SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 0 );
+	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 
 	if(SDL_SetVideoMode(width, height, bpp, flags) == 0){
 		fprintf(stderr, "Video mode set failed: %s\n", SDL_GetError());

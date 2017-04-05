@@ -52,12 +52,62 @@ void Triangle::render(Camera C){
 	glRotatef(m_rotationAngle, 0.0f, 0.0f, 1.0f);
 
 	glBegin(GL_TRIANGLES);
+		// Top
 		glColor3f(1.0f,0.0f,0.0f);
-		glVertex3f(-0.5f,-0.5f,0.0f);
+		glVertex3f(-0.5f,-0.5f,0.05f);
 		glColor3f(1.0f,1.0f,0.0f);
-		glVertex3f(0.5f,-0.5f,0.0f);
+		glVertex3f(0.5f,-0.5f,0.05f);
 		glColor3f(0.0f,0.0f,1.0f);
-		glVertex3f(0.0f,0.5f,0.0f);
+		glVertex3f(0.0f,0.5f,0.05f);
+		// Bottom
+		glColor3f(1.0f,0.0f,0.0f);
+		glVertex3f(-0.5f,-0.5f,-0.05f);
+		glColor3f(1.0f,1.0f,0.0f);
+		glVertex3f(0.5f,-0.5f,-0.05f);
+		glColor3f(0.0f,0.0f,1.0f);
+		glVertex3f(0.0f,0.5f,-0.05f);
+		// (-0.5,-0.5)	-> (0.5,-0.5) up
+		glColor3f(1.0f,0.0f,0.0f);
+		glVertex3f(-0.5f,-0.5f,0.05f);
+		glColor3f(1.0f,1.0f,0.0f);
+		glVertex3f(0.5f,-0.5f,0.05f);
+		glColor3f(1.0f,1.0f,0.0f);
+		glVertex3f(0.5f,-0.5f,-0.05f);
+		// (-0.5,-0.5)	-> (0.5,-0.5) down
+		glColor3f(1.0f,0.0f,0.0f);
+		glVertex3f(-0.5f,-0.5f,-0.05f);
+		glColor3f(1.0f,1.0f,0.0f);
+		glVertex3f(0.5f,-0.5f,-0.05f);
+		glColor3f(1.0f,0.0f,0.0f);
+		glVertex3f(-0.5f,-0.5f,0.05f);
+		// (0.5,-0.5) Yellow-> (0.0,0.5) Blue up
+		glColor3f(1.0f,1.0f,0.0f);
+		glVertex3f(0.5f,-0.5f,0.05f);
+		glColor3f(0.0f,0.0f,1.0f);
+		glVertex3f(0.0f,0.5f,0.05f);
+		glColor3f(1.0f,1.0f,0.0f);
+		glVertex3f(0.5f,-0.5f,-0.05f);
+		// (0.5,-0.5) Yellow-> (0.0,0.5) Blue down
+		glColor3f(1.0f,1.0f,0.0f);
+		glVertex3f(0.5f,-0.5f,-0.05f);
+		glColor3f(0.0f,0.0f,1.0f);
+		glVertex3f(0.0f,0.5f,-0.05f);
+		glColor3f(0.0f,0.0f,1.0f);
+		glVertex3f(0.0f,0.5f,0.05f);
+		// (0.0,0.5) Blue-> (-0.5,-0.5) Red up
+		glColor3f(0.0f,0.0f,1.0f);
+		glVertex3f(0.0f,0.5f,0.05f);
+		glColor3f(1.0f,0.0f,0.0f);
+		glVertex3f(-0.5f,-0.5f,0.05f);
+		glColor3f(1.0f,0.0f,0.0f);
+		glVertex3f(-0.5f,-0.5f,-0.05f);
+		// (0.0,0.5) Blue-> (-0.5,-0.5) Red down
+		glColor3f(0.0f,0.0f,1.0f);
+		glVertex3f(0.0f,0.5f,-0.05f);
+		glColor3f(1.0f,0.0f,0.0f);
+		glVertex3f(-0.5f,-0.5f,-0.05f);
+		glColor3f(0.0f,0.0f,1.0f);
+		glVertex3f(0.0f,0.5f,0.05f);
 	glEnd();
 
 	glBegin(GL_LINES);
