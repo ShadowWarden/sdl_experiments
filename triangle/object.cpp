@@ -17,16 +17,39 @@
 /* Fix radius to 1.0 */
 //const float r = 2.0f;
 
-Object::Object(){
-	float vert[18] = {1.0f,0.0f,0.0f,-0.5f,-0.5f,0.00f,1.0f,1.0f,0.0f,
-			0.5f,-0.5f,0.00f,
-			0.0f,0.0f,1.0f,
-			0.0f,0.5f,0.00f};
-	int N = 1;
-	T = new Triangle(vert);
+float * read(FILE * fin, int N){
+	float *vert = new float[N*18];
+	int i;
+	for(i=0;i<N*18;i++)
+		fscanf(fin,"%f ",vert+i);
+	for(i=0;i<18;i++){
+		fprintf(stderr,"%f ",vert[18+i]);
+		if((i+1)%3==0)
+			fprintf(stderr,"\n");
+	}
+	return vert;
+}
+
+int getsize(FILE * fin){
+	fseek(fin,SEEK_SET,0);
+	int n;
+	fscanf(fin,"%d",&n);
+	return n;
+}
+
+Object::Object(char *fname){
+	FILE *fin = fopen(fname,"r");
+	N = getsize(fin);
+	float *vert = read(fin,N);
+	T = new Triangle[N];
+	int i;
+	for(i=0;i<N;i++){
+		T[i] = Triangle(&vert[i*18]);
+	}	
 	m_rotationAngle = 0.0f;
 	speed = 15.0f;
 	flag = false;
+	T[1].print();	
 }
 
 bool Object::init(){
@@ -63,7 +86,9 @@ void Object::render(Camera C){
 
 	int i;
 	glBegin(GL_TRIANGLES);
-		T->render();	
+		for(i=0;i<N;i++){	
+			T[i].render();
+		}
 	glEnd();
 
 	glBegin(GL_LINES);

@@ -11,7 +11,7 @@
 
 class Object{
 	public:
-		Object();
+		Object(char *);
 
 		bool init();
 		void prepare(float dt);
@@ -28,4 +28,5 @@ class Object{
 		float m_rotationAngle;
 		float speed;
 		bool flag;
+		char *fname;
 };

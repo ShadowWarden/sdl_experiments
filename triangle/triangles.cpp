@@ -23,6 +23,20 @@ Triangle::Triangle(float vert[18]){
 	}
 }
 
+Triangle::Triangle(){
+	
+}
+
+void Triangle::print(){
+	int i,j;
+	for(i=0;i<3;i++){
+		for(j=0;j<3;j++){
+			fprintf(stderr,"%f ",color[i][j]);
+		}
+		fprintf(stderr,"\n");
+	}
+}
+
 void Triangle::render(){
 	glColor3f(color[0][0],color[0][1],color[0][2]);
 	glVertex3f(vertex[0][0],vertex[0][1],vertex[0][2]);

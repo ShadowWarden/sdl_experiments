@@ -173,7 +173,7 @@ int main(int argc, char ** argv){
 		quit(1);
 	}
 
-	Object T;
+	Object T = Object("solid_triangle.in");
 	Camera C;
 	int fps;
 	setup_opengl(width, height);
