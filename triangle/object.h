@@ -11,7 +11,7 @@
 
 class Object{
 	public:
-		Object(char *);
+		Object(const char *);
 
 		bool init();
 		void prepare(float dt);

@@ -20,9 +20,11 @@
 float * read(FILE * fin, int N){
 	float *vert = new float[N*18];
 	int i;
-	for(i=0;i<N*18;i++)
-		fscanf(fin,"%f ",vert+i);
-	for(i=0;i<18;i++){
+	for(i=0;i<N*18;i++){
+		int err = fscanf(fin,"%f",vert+i);
+		if(err == 0)
+			fprintf(stderr,"Unable to read float %d\n",i);
+	}for(i=0;i<18;i++){
 		fprintf(stderr,"%f ",vert[18+i]);
 		if((i+1)%3==0)
 			fprintf(stderr,"\n");
@@ -33,11 +35,12 @@ float * read(FILE * fin, int N){
 int getsize(FILE * fin){
 	fseek(fin,SEEK_SET,0);
 	int n;
-	fscanf(fin,"%d",&n);
+	if(fscanf(fin,"%d",&n)==0)
+		fprintf(stderr,"Unable to read int size\n");
 	return n;
 }
 
-Object::Object(char *fname){
+Object::Object(const char *fname){
 	FILE *fin = fopen(fname,"r");
 	N = getsize(fin);
 	float *vert = read(fin,N);
