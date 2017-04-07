@@ -155,8 +155,8 @@ int main(int argc, char ** argv){
 		quit(1);
 	}
 
-	width = 640;
-	height = 480;
+	width = 800;
+	height = 600;
 	bpp = info->vfmt->BitsPerPixel;
 
 	flags = SDL_OPENGL;
