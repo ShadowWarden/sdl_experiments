@@ -24,10 +24,6 @@ float * read(FILE * fin, int N){
 		int err = fscanf(fin,"%f",vert+i);
 		if(err == 0)
 			fprintf(stderr,"Unable to read float %d\n",i);
-	}for(i=0;i<18;i++){
-		fprintf(stderr,"%f ",vert[18+i]);
-		if((i+1)%3==0)
-			fprintf(stderr,"\n");
 	}
 	return vert;
 }
@@ -40,6 +36,9 @@ int getsize(FILE * fin){
 	return n;
 }
 
+Object::Object(){
+}
+
 Object::Object(const char *fname){
 	FILE *fin = fopen(fname,"r");
 	N = getsize(fin);
@@ -50,9 +49,8 @@ Object::Object(const char *fname){
 		T[i] = Triangle(&vert[i*18]);
 	}	
 	m_rotationAngle = 0.0f;
-	speed = 15.0f;
+	speed = 0.0f;
 	flag = false;
-	T[1].print();	
 }
 
 bool Object::init(){
@@ -71,20 +69,6 @@ void Object::prepare(float dt){
 }
 
 void Object::render(Camera C){
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST);
-	glLoadIdentity();
-	float th = C.Getth();
-	float ph = C.Getph();
-	float r = C.Getr();
-
-	float Eye_x = r*sin(th*DEGtoRAD)*cos(ph*DEGtoRAD);
-	float Eye_y = r*sin(th*DEGtoRAD)*sin(ph*DEGtoRAD);
-	float Eye_z = r*cos(th*DEGtoRAD);
-	
-	float Up_z = (th>=180.0f && th<360.0f)?-1.0f:1.0f;
-
-	gluLookAt(Eye_x,Eye_y,Eye_z,0.0,0.0,0.0,0.0,0.0,Up_z);
 	glRotatef(m_rotationAngle, 0.0f, 0.0f, 1.0f);
 
 	int i;
@@ -105,6 +89,7 @@ void Object::render(Camera C){
 		glVertex3f(0.0f,0.0f,0.0f);
 		glVertex3f(0.0f,0.0f,1.0f);
 	glEnd();
+	m_rotationAngle = 0;
 }
 
 void Object::onResize(int width, int height){

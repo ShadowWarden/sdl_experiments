@@ -13,6 +13,9 @@
 #include "object.h"
 
 #include <cstdlib>
+#include <cmath>
+
+#define DEGtoRAD 0.0174533
 
 static int fps=0,sec0=0,count=0;
 int FramesPerSecond(void){
@@ -41,9 +44,11 @@ static void key_press(SDL_keysym* keysym, Object *T, Camera *C, int * fps){
 			fprintf(stderr,"FPS = %d\n",*fps);
 			break;
 		case SDLK_KP_PLUS:
+		case SDLK_PLUS:
 			T->ChangeSpeed(5.0f);
 			break;
 		case SDLK_KP_MINUS:
+		case SDLK_MINUS:
 			T->ChangeSpeed(-5.0f);
 			break;
 		case SDLK_i:
@@ -94,10 +99,31 @@ static void process_events(Object *T,Camera *C,int *fps){
 	}
 }
 
-static void draw_screen(Object T,Camera C,int * fps){
+static void render_init(){
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+	glLoadIdentity();
+}
+
+static void draw_screen(Object *T,Camera C,int * fps, int nObj){
+	int i;
 	float time = 0.001*glutGet(GLUT_ELAPSED_TIME);
-	T.prepare(time);
-	T.render(C);
+	float th = C.Getth();
+	float ph = C.Getph();
+	float r = C.Getr();
+
+	float Eye_x = r*sin(th*DEGtoRAD)*cos(ph*DEGtoRAD);
+	float Eye_y = r*sin(th*DEGtoRAD)*sin(ph*DEGtoRAD);
+	float Eye_z = r*cos(th*DEGtoRAD);
+
+	float Up_z = (th>=180.0f && th<360.0f)?-1.0f:1.0f;
+
+	gluLookAt(Eye_x,Eye_y,Eye_z,0.0,0.0,0.0,0.0,0.0,Up_z);
+
+	for(i=0;i<nObj;i++){
+		T[i].prepare(time);
+		T[i].render(C);
+	}
 	*fps = FramesPerSecond();
 	SDL_GL_SwapBuffers();
 }
@@ -173,14 +199,20 @@ int main(int argc, char ** argv){
 		quit(1);
 	}
 
-	Object T = Object("solid_triangle.in");
+	SDL_WM_SetCaption("ShadowEngine","SE");
+
+	Object *T = new Object[2];
+	T[0] = Object("solid_triangle.in");
+	T[1] = Object("solid_triangle_2.in");
+	T[1].ChangeSpeed(-10.0f);
 	Camera C;
 	int fps;
 	setup_opengl(width, height);
 
 	while(1){
-		process_events(&T,&C,&fps);
-		draw_screen(T,C,&fps);
+		render_init();
+		process_events(T,&C,&fps);
+		draw_screen(T,C,&fps,2);
 	}
 
 	return 0;

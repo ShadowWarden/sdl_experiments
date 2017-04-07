@@ -12,6 +12,7 @@
 class Object{
 	public:
 		Object(const char *);
+		Object();
 
 		bool init();
 		void prepare(float dt);
