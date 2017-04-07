@@ -6,25 +6,11 @@
 *  Simple rotating triangle
 */
 
-#include "camera.h"
-
 class Triangle{
 	public:
-		Triangle();
-
-		bool init();
-		void prepare(float dt);
-		void render(Camera C);
-		void shutdown();
-
-		void onResize(int width, int height);
-		void print();
-		void ChangeSpeed(float);
-		float GetAngle();
+		Triangle(float vertex[18]);
+		void render();
 	private:
-		float m_rotationAngle;
-		float speed;
-		bool flag;
+		float vertex[3][3];
+		float color[3][3];
 };
-
-extern float speed;

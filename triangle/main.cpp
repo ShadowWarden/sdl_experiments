@@ -10,7 +10,7 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include <GL/glu.h>
-#include "triangles.h"
+#include "object.h"
 
 #include <cstdlib>
 
@@ -32,7 +32,7 @@ static void quit(int code){
 	exit(code);
 }
 
-static void key_press(SDL_keysym* keysym, Triangle *T, Camera *C, int * fps){
+static void key_press(SDL_keysym* keysym, Object *T, Camera *C, int * fps){
 	switch(keysym->sym){
 		case SDLK_ESCAPE:
 			quit(0);
@@ -79,7 +79,7 @@ static void key_press(SDL_keysym* keysym, Triangle *T, Camera *C, int * fps){
 	}
 }
 
-static void process_events(Triangle *T,Camera *C,int *fps){
+static void process_events(Object *T,Camera *C,int *fps){
 	SDL_Event event;
 
 	while(SDL_PollEvent(&event)){
@@ -94,7 +94,7 @@ static void process_events(Triangle *T,Camera *C,int *fps){
 	}
 }
 
-static void draw_screen(Triangle T,Camera C,int * fps){
+static void draw_screen(Object T,Camera C,int * fps){
 	float time = 0.001*glutGet(GLUT_ELAPSED_TIME);
 	T.prepare(time);
 	T.render(C);
@@ -173,7 +173,7 @@ int main(int argc, char ** argv){
 		quit(1);
 	}
 
-	Triangle T;
+	Object T;
 	Camera C;
 	int fps;
 	setup_opengl(width, height);

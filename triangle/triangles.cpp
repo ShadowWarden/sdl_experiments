@@ -8,145 +8,26 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <cstdio>
-#include <cmath>
 #include "triangles.h"
 
-#define PI 3.14159265
-#define DEGtoRAD 0.0174533
-/* Fix radius to 1.0 */
-//const float r = 2.0f;
-
-Triangle::Triangle(){
-	m_rotationAngle = 0.0f;
-	speed = 15.0f;
-	flag = false;
-}
-
-bool Triangle::init(){
-	glEnable(GL_DEPTH_TEST);
-	glClearColor(0.5f,0.5f,0.5f,0.5f);
-
-	return true;
-}
-
-void Triangle::prepare(float dt){
-	if(!flag)
-		m_rotationAngle += speed*dt;
-	if(m_rotationAngle > 360.0f){
-		m_rotationAngle = m_rotationAngle-360.0f;
+Triangle::Triangle(float vert[18]){
+	int i,j;
+	for(i=0;i<6;i++){
+		if(i%2==0){
+			for(j=0;j<3;j++)
+				color[i/2][j] = vert[i*3+j];
+		}else{
+			for(j=0;j<3;j++)
+				vertex[i/2][j] = vert[i*3+j];
+		}
 	}
 }
 
-void Triangle::render(Camera C){
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST);
-	glLoadIdentity();
-	float th = C.Getth();
-	float ph = C.Getph();
-	float r = C.Getr();
-
-	float Eye_x = r*sin(th*DEGtoRAD)*cos(ph*DEGtoRAD);
-	float Eye_y = r*sin(th*DEGtoRAD)*sin(ph*DEGtoRAD);
-	float Eye_z = r*cos(th*DEGtoRAD);
-	
-	float Up_z = (th>=180.0f && th<360.0f)?-1.0f:1.0f;
-
-	gluLookAt(Eye_x,Eye_y,Eye_z,0.0,0.0,0.0,0.0,0.0,Up_z);
-	glRotatef(m_rotationAngle, 0.0f, 0.0f, 1.0f);
-
-	glBegin(GL_TRIANGLES);
-		// Top
-		glColor3f(1.0f,0.0f,0.0f);
-		glVertex3f(-0.5f,-0.5f,0.05f);
-		glColor3f(1.0f,1.0f,0.0f);
-		glVertex3f(0.5f,-0.5f,0.05f);
-		glColor3f(0.0f,0.0f,1.0f);
-		glVertex3f(0.0f,0.5f,0.05f);
-		// Bottom
-		glColor3f(1.0f,0.0f,0.0f);
-		glVertex3f(-0.5f,-0.5f,-0.05f);
-		glColor3f(1.0f,1.0f,0.0f);
-		glVertex3f(0.5f,-0.5f,-0.05f);
-		glColor3f(0.0f,0.0f,1.0f);
-		glVertex3f(0.0f,0.5f,-0.05f);
-		// (-0.5,-0.5)	-> (0.5,-0.5) up
-		glColor3f(1.0f,0.0f,0.0f);
-		glVertex3f(-0.5f,-0.5f,0.05f);
-		glColor3f(1.0f,1.0f,0.0f);
-		glVertex3f(0.5f,-0.5f,0.05f);
-		glColor3f(1.0f,1.0f,0.0f);
-		glVertex3f(0.5f,-0.5f,-0.05f);
-		// (-0.5,-0.5)	-> (0.5,-0.5) down
-		glColor3f(1.0f,0.0f,0.0f);
-		glVertex3f(-0.5f,-0.5f,-0.05f);
-		glColor3f(1.0f,1.0f,0.0f);
-		glVertex3f(0.5f,-0.5f,-0.05f);
-		glColor3f(1.0f,0.0f,0.0f);
-		glVertex3f(-0.5f,-0.5f,0.05f);
-		// (0.5,-0.5) Yellow-> (0.0,0.5) Blue up
-		glColor3f(1.0f,1.0f,0.0f);
-		glVertex3f(0.5f,-0.5f,0.05f);
-		glColor3f(0.0f,0.0f,1.0f);
-		glVertex3f(0.0f,0.5f,0.05f);
-		glColor3f(1.0f,1.0f,0.0f);
-		glVertex3f(0.5f,-0.5f,-0.05f);
-		// (0.5,-0.5) Yellow-> (0.0,0.5) Blue down
-		glColor3f(1.0f,1.0f,0.0f);
-		glVertex3f(0.5f,-0.5f,-0.05f);
-		glColor3f(0.0f,0.0f,1.0f);
-		glVertex3f(0.0f,0.5f,-0.05f);
-		glColor3f(0.0f,0.0f,1.0f);
-		glVertex3f(0.0f,0.5f,0.05f);
-		// (0.0,0.5) Blue-> (-0.5,-0.5) Red up
-		glColor3f(0.0f,0.0f,1.0f);
-		glVertex3f(0.0f,0.5f,0.05f);
-		glColor3f(1.0f,0.0f,0.0f);
-		glVertex3f(-0.5f,-0.5f,0.05f);
-		glColor3f(1.0f,0.0f,0.0f);
-		glVertex3f(-0.5f,-0.5f,-0.05f);
-		// (0.0,0.5) Blue-> (-0.5,-0.5) Red down
-		glColor3f(0.0f,0.0f,1.0f);
-		glVertex3f(0.0f,0.5f,-0.05f);
-		glColor3f(1.0f,0.0f,0.0f);
-		glVertex3f(-0.5f,-0.5f,-0.05f);
-		glColor3f(0.0f,0.0f,1.0f);
-		glVertex3f(0.0f,0.5f,0.05f);
-	glEnd();
-
-	glBegin(GL_LINES);
-		glColor3f(1.0f,0.0f,0.0f);
-		glVertex3f(0.0f,0.0f,0.0f);
-		glVertex3f(1.0f,0.0f,0.0f);
-		glColor3f(0.0f,1.0f,0.0f);
-		glVertex3f(0.0f,0.0f,0.0f);
-		glVertex3f(0.0f,1.0f,0.0f);
-		glColor3f(0.0f,0.0f,1.0f);
-		glVertex3f(0.0f,0.0f,0.0f);
-		glVertex3f(0.0f,0.0f,1.0f);
-	glEnd();
-}
-
-void Triangle::onResize(int width, int height){
-	glViewport(0,0,width,height);
-	
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	
-	gluPerspective(45.0f, float(width)/float(height), 1.0f, 100.0f);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-}
-
-void Triangle::print(){
-	fprintf(stderr,"speed = %f ; m_rotationAngle = %f\n",speed,m_rotationAngle);
-}
-
-float Triangle::GetAngle(){
-	return m_rotationAngle;
-}
-
-void Triangle::ChangeSpeed(float dv){
-	speed += dv;
-	//flag = true;
+void Triangle::render(){
+	glColor3f(color[0][0],color[0][1],color[0][2]);
+	glVertex3f(vertex[0][0],vertex[0][1],vertex[0][2]);
+	glColor3f(color[1][0],color[1][1],color[1][2]);
+	glVertex3f(vertex[1][0],vertex[1][1],vertex[1][2]);
+	glColor3f(color[2][0],color[2][1],color[2][2]);
+	glVertex3f(vertex[2][0],vertex[2][1],vertex[2][2]);
 }
